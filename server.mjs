@@ -10,6 +10,7 @@ const  app = express()
 const server=http.createServer(app)
 
 const io=new Server(server,{
+    pingTimeout:60000,
     cors:{
         origin:true
     
@@ -24,6 +25,13 @@ io.on('connection',(socket)=>{
          socket.on('message',(data)=>{
             
         io.emit('received_message',data)
+        })
+     
+        socket.on('typing',()=>{
+            socket.broadcast.emit('typing')
+        })
+        socket.on('stop typing',()=>{
+            socket.broadcast.emit('stop typing')
         })
   
 })
